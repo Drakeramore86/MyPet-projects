@@ -1,0 +1,139 @@
+choice = str("_" * 9)
+field = [[choice[0], choice[1], choice[2]], [choice[3], choice[4], choice[5]], [choice[6], choice[7], choice[8]]]
+print(f"""---------
+| {field[0][0]} {field[0][1]} {field[0][2]} |
+| {field[1][0]} {field[1][1]} {field[1][2]} |
+| {field[2][0]} {field[2][1]} {field[2][2]} |
+---------
+""")
+
+end = 0
+player = 0
+while end == 0:
+    move = str(input("Enter the coordinates: ")).split()
+    flag = 0
+    x_count = 0
+    o_count = 0
+    blanks = 0
+    total_blanks = 0
+    result = []
+    count_1 = 0
+    count_2 = 0
+    answer = []
+    count = 0
+    for i in move:
+        if i in "123456789":
+            if i in "123":
+                count += 1
+            else:
+                print("Coordinates should be from 1 to 3!")
+                flag += 1
+                break
+        else:
+            print("You should enter numbers!")
+            flag += 1
+            break
+
+    if count == 2 and flag == 0:
+        if field[int(move[0]) - 1][int(move[1]) - 1] == "_":
+            if player % 2 == 0:
+                field[int(move[0]) - 1][int(move[1]) - 1] = "X"
+                player += 1
+            else:
+                field[int(move[0]) - 1][int(move[1]) - 1] = "O"
+                player += 1
+        else:
+            print("This cell is occupied! Choose another one!")
+            flag += 1
+
+    for i in range(len(field)):
+        for j in range(len(field)):
+            if field[i][j] == "X":
+                x_count += 1
+            elif field[i][j] == "O":
+                o_count += 1
+            else:
+                blanks += 1
+        if x_count == 3:
+            result.append(1)
+        elif o_count == 3:
+            result.append(2)
+        x_count = 0
+        o_count = 0
+        total_blanks += blanks
+        blanks = 0
+    for i in result:
+        if i == 1:
+            count_1 += 1
+        elif i == 2:
+            count_2 += 1
+
+    if (count_1 == 1 and count_2 == 0) or (field[0][0] == "X" and field[1][1] == "X" and field[2][2] == "X") \
+            or (field[0][2] == "X" and field[1][1] == "X" and field[2][0] == "X"):
+        answer = 3
+        flag = 0
+    elif (count_2 == 1 and count_1 == 0) or (field[0][0] == "O" and field[1][1] == "O" and field[2][2] == "O") \
+            or (field[0][2] == "O" and field[1][1] == "O" and field[2][0] == "O"):
+        answer = 4
+        flag = 0
+
+    if flag == 0:
+        print(f"""---------
+| {field[0][0]} {field[0][1]} {field[0][2]} |
+| {field[1][0]} {field[1][1]} {field[1][2]} |
+| {field[2][0]} {field[2][1]} {field[2][2]} |
+---------
+""")
+
+    if answer == 3:
+        print("X wins")
+        end = 1
+    elif answer == 4:
+        print("O wins")
+        end = 1
+    else:
+        result = []
+        count_1 = 0
+        count_2 = 0
+        for i in range(len(field)):
+            for j in range(len(field)):
+                if field[j][i] == "X":
+                    x_count += 1
+                elif field[j][i] == "O":
+                    o_count += 1
+                else:
+                    blanks += 1
+            if x_count == 3:
+                result.append(1)
+            elif o_count == 3:
+                result.append(2)
+            x_count = 0
+            o_count = 0
+            total_blanks += blanks
+            blanks = 0
+
+        for i in result:
+            if i == 1:
+                count_1 += 1
+            elif i == 2:
+                count_2 += 1
+
+        if count_1 == count_2 == total_blanks == 0:
+            answer = 2
+            flag = 0
+        elif count_1 == 1 and count_2 == 0:
+            answer = 3
+            flag = 0
+        elif count_2 == 1 and count_1 == 0:
+            answer = 4
+            flag = 0
+
+        if answer == 2:
+            print("Draw")
+            end = 1
+        elif answer == 3:
+            print("X wins")
+            end = 1
+        elif answer == 4:
+            print("O wins")
+            end = 1
